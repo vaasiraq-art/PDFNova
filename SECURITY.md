@@ -143,9 +143,9 @@ const firebaseConfig = {
 
 Create `.env` file:
 ```
-VITE_FIREBASE_API_KEY=AIzaSyD0hJbbA4W1X1A1I93Ck84OkKO9mgbYdAE
-VITE_FIREBASE_AUTH_DOMAIN=pdfnova-8ff02.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=pdfnova-8ff02
+VITE_FIREBASE_API_KEY=your-api-key-here
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
 ```
 
 **Note:** These are still public in the browser, but cleaner in code.

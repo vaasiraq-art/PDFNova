@@ -1,20 +1,18 @@
 {
-  "name": "PDF Book Reader",
-  "short_name": "PDF Reader",
-  "description": "AI-powered online PDF book reader with smart features like bookmarks, dark mode, text analysis, and AI assistant.",
+  "name": "PDFNova - Free PDF Tools",
+  "short_name": "PDFNova",
+  "description": "Free online PDF tools. Merge, split, compress, convert PDFs. Fast and secure.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f9fafb",
+  "background_color": "#ffffff",
   "theme_color": "#6366f1",
   "orientation": "any",
-  "categories": ["productivity", "education", "books"],
+  "categories": ["productivity", "utilities"],
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text y='75' x='20' font-size='70' font-weight='bold' fill='white'>P</text></svg>",
       "sizes": "any",
       "type": "image/svg+xml"
     }
-  ],
-  "lang": "en",
-  "dir": "ltr"
+  ]
 }

@@ -1,141 +1,97 @@
 import { Link } from 'react-router-dom';
-import { tools, categories } from '../data/tools';
-import { useState } from 'react';
+import { tools } from '../data/tools';
 
 export default function Home() {
-  const [activeCategory, setActiveCategory] = useState('All');
+  const formatDate = (date: Date) => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return {
+      month: months[date.getMonth()],
+      day: date.getDate(),
+      year: date.getFullYear()
+    };
+  };
 
-  const filteredTools = activeCategory === 'All' 
-    ? tools 
-    : tools.filter(t => t.category === activeCategory);
+  const today = new Date();
+  const dateInfo = formatDate(today);
 
   return (
     <div>
-      {/* Hero */}
-      <section className="bg-gray-50 border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Every PDF tool you need
-            </h1>
-            <p className="text-lg text-gray-600 mb-8">
-              Merge, split, compress, convert, and edit PDFs. Free and easy to use.
+      {/* Welcome Post */}
+      <article className="box post post-excerpt">
+        <header>
+          <h2><Link to="/">Welcome to PDFNova</Link></h2>
+          <p>Free online PDF tools for all your document needs</p>
+        </header>
+        <div className="info">
+          <span className="date">
+            <span className="month">{dateInfo.month}</span>
+            <span className="day">{dateInfo.day}</span>
+            <span className="year">, {dateInfo.year}</span>
+          </span>
+          <ul className="stats">
+            <li><a href="#">16 Tools</a></li>
+            <li><a href="#">100% Free</a></li>
+            <li><a href="#">Secure</a></li>
+          </ul>
+        </div>
+        <p>
+          <strong>Hello!</strong> You're looking at <strong>PDFNova</strong>, a complete suite of free online PDF tools. 
+          Merge, split, compress, convert, and edit PDFs with ease. All processing happens directly in your browser, 
+          ensuring your files never leave your device.
+        </p>
+        <p>
+          PDFNova offers everything you need to work with PDF documents. Whether you're combining multiple files, 
+          extracting pages, reducing file size, or converting between formats, we've got you covered. 
+          No registration required, no file limits, completely free.
+        </p>
+      </article>
+
+      {/* Tools as Posts */}
+      {tools.slice(0, 6).map((tool, index) => {
+        const toolDate = new Date(today);
+        toolDate.setDate(today.getDate() - (index + 1) * 3);
+        const toolDateInfo = formatDate(toolDate);
+
+        return (
+          <article key={tool.id} className="box post post-excerpt">
+            <header>
+              <h2><Link to={`/tools/${tool.id}`}>{tool.name}</Link></h2>
+              <p>{tool.description}</p>
+            </header>
+            <div className="info">
+              <span className="date">
+                <span className="month">{toolDateInfo.month}</span>
+                <span className="day">{toolDateInfo.day}</span>
+                <span className="year">, {toolDateInfo.year}</span>
+              </span>
+              <ul className="stats">
+                <li><a href="#">Free</a></li>
+                <li><a href="#">{tool.category}</a></li>
+              </ul>
+            </div>
+            <p>
+              {tool.description}. This tool is completely free to use with no registration required. 
+              All processing happens in your browser, so your files are never uploaded to any server. 
+              Fast, secure, and easy to use.
             </p>
-            <div className="flex gap-3">
-              <Link
-                to="/tools/merge-pdf"
-                className="px-6 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700"
-              >
-                Get Started
+            <p>
+              <Link to={`/tools/${tool.id}`} className="button">
+                Use {tool.name} →
               </Link>
-              <a
-                href="#tools"
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-50"
-              >
-                Browse Tools
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+            </p>
+          </article>
+        );
+      })}
 
-      {/* Tools */}
-      <section id="tools" className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-          All PDF Tools
-        </h2>
-
-        {/* Category Filter */}
-        <div className="flex gap-2 mb-8 flex-wrap">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeCategory === cat
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+      {/* Pagination */}
+      <div className="pagination">
+        <div className="pages">
+          <a href="#" className="active">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
         </div>
-
-        {/* Tools Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredTools.map(tool => (
-            <Link
-              key={tool.id}
-              to={tool.id === 'pdf-reader' ? '/reader' : `/tools/${tool.id}`}
-              className="group p-6 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all"
-            >
-              <div className={`w-12 h-12 ${tool.color} rounded-lg flex items-center justify-center text-white font-bold text-lg mb-4`}>
-                {tool.icon}
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-1">
-                {tool.name}
-              </h3>
-              <p className="text-sm text-gray-600">
-                {tool.description}
-              </p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="border-t border-gray-200 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-8 text-center">
-            Why use PDFNova?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">100% Free</h3>
-              <p className="text-sm text-gray-600">
-                All tools are completely free. No registration, no hidden costs, no file limits.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Secure & Private</h3>
-              <p className="text-sm text-gray-600">
-                Files are processed in your browser. Nothing is uploaded to any server.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Fast & Easy</h3>
-              <p className="text-sm text-gray-600">
-                Simple interface, instant results. Works on any device, no installation needed.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="max-w-3xl mx-auto px-4 py-16">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-8">
-          Frequently Asked Questions
-        </h2>
-        <div className="space-y-4">
-          {[
-            { q: 'Is PDFNova free?', a: 'Yes, all tools are 100% free with no registration required.' },
-            { q: 'Are my files secure?', a: 'Yes. All processing happens in your browser. Files never leave your device.' },
-            { q: 'What formats are supported?', a: 'PDF, JPG, PNG, and common document formats. We support conversion between these formats.' },
-            { q: 'Do I need to install software?', a: 'No. PDFNova works entirely in your web browser on any device.' },
-          ].map((faq, i) => (
-            <details key={i} className="border border-gray-200 rounded-lg">
-              <summary className="px-5 py-4 cursor-pointer font-medium text-gray-900 hover:bg-gray-50">
-                {faq.q}
-              </summary>
-              <div className="px-5 pb-4 text-sm text-gray-600">
-                {faq.a}
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
+        <Link to="/" className="button next">View All Tools</Link>
+      </div>
     </div>
   );
 }

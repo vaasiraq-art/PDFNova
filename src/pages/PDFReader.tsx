@@ -27,65 +27,105 @@ export default function PDFReader() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
+  const today = new Date();
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
   if (!file) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <div className="w-20 h-20 bg-blue-50 rounded-lg flex items-center justify-center mx-auto mb-6">
-          <BookOpen size={40} className="text-blue-600" />
+      <article className="box post">
+        <header>
+          <h2>PDF Reader</h2>
+          <p>Upload a PDF to start reading</p>
+        </header>
+        <div className="info">
+          <span className="date">
+            <span className="month">{months[today.getMonth()]}</span>
+            <span className="day">{today.getDate()}</span>
+            <span className="year">, {today.getFullYear()}</span>
+          </span>
+          <ul className="stats">
+            <li><a href="#">Free</a></li>
+            <li><a href="#">Reader</a></li>
+          </ul>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">PDF Reader</h1>
-        <p className="text-lg text-gray-600 mb-8">Upload a PDF to start reading</p>
-        <label className="inline-flex flex-col items-center p-12 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition-colors">
-          <Upload size={32} className="text-blue-600 mb-3" />
-          <span className="font-medium text-gray-900">Click to upload PDF</span>
-          <span className="text-sm text-gray-500 mt-1">or drag and drop</span>
-          <input type="file" accept=".pdf" onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])} className="hidden" />
-        </label>
-      </div>
+        <div style={{ textAlign: 'center', padding: '3em 0' }}>
+          <label style={{ cursor: 'pointer' }}>
+            <div style={{ marginBottom: '1em' }}>
+              <BookOpen size={48} style={{ color: '#49bf9d' }} />
+            </div>
+            <p style={{ marginBottom: '1em' }}>
+              <strong>Click to upload PDF</strong>
+            </p>
+            <p style={{ fontSize: '0.9em', color: '#888' }}>
+              or drag and drop
+            </p>
+            <input 
+              type="file" 
+              accept=".pdf" 
+              onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])} 
+              style={{ display: 'none' }} 
+            />
+          </label>
+        </div>
+      </article>
     );
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-64px)]">
+    <article className="box post">
+      <header>
+        <h2>{file.name}</h2>
+        <p>PDF Reader</p>
+      </header>
+      <div className="info">
+        <span className="date">
+          <span className="month">{months[today.getMonth()]}</span>
+          <span className="day">{today.getDate()}</span>
+          <span className="year">, {today.getFullYear()}</span>
+        </span>
+        <ul className="stats">
+          <li><a href="#">Page {currentPage} of {numPages}</a></li>
+        </ul>
+      </div>
+
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-white">
-        <div className="flex items-center gap-2">
-          <button onClick={() => setFile(null)} className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1em 0', borderBottom: '1px solid #eee', marginBottom: '1.5em' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
+          <button onClick={() => setFile(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#49bf9d' }}>
             ← New File
           </button>
-          <span className="text-sm text-gray-500 truncate max-w-[200px]">{file.name}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <button onClick={() => setScale(s => Math.max(s - 0.2, 0.5))} className="p-2 text-gray-600 hover:text-gray-900">
-            <ZoomOut size={16} />
-          </button>
-          <span className="text-sm text-gray-600 min-w-[50px] text-center">{Math.round(scale * 100)}%</span>
-          <button onClick={() => setScale(s => Math.min(s + 0.2, 3))} className="p-2 text-gray-600 hover:text-gray-900">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
+          <button onClick={() => setScale(s => Math.max(s - 0.2, 0.5))} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5em' }}>
             <ZoomIn size={16} />
           </button>
-          <div className="mx-2 h-6 w-px bg-gray-200" />
-          <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage <= 1} className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-30">
+          <span style={{ fontSize: '0.9em', minWidth: '50px', textAlign: 'center' }}>{Math.round(scale * 100)}%</span>
+          <button onClick={() => setScale(s => Math.min(s + 0.2, 3))} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5em' }}>
+            <ZoomOut size={16} />
+          </button>
+          <div style={{ margin: '0 1em', height: '20px', width: '1px', background: '#eee' }} />
+          <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage <= 1} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5em', opacity: currentPage <= 1 ? 0.3 : 1 }}>
             <ChevronLeft size={16} />
           </button>
-          <span className="text-sm text-gray-600">{currentPage} / {numPages}</span>
-          <button onClick={() => setCurrentPage(p => Math.min(numPages, p + 1))} disabled={currentPage >= numPages} className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-30">
+          <span style={{ fontSize: '0.9em' }}>{currentPage} / {numPages}</span>
+          <button onClick={() => setCurrentPage(p => Math.min(numPages, p + 1))} disabled={currentPage >= numPages} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5em', opacity: currentPage >= numPages ? 0.3 : 1 }}>
             <ChevronRight size={16} />
           </button>
         </div>
       </div>
 
       {/* PDF Content */}
-      <div className="flex-1 overflow-auto bg-gray-100">
-        <div className="flex justify-center py-8">
+      <div style={{ overflow: 'auto', maxHeight: '70vh', background: '#f5f5f5', padding: '1em' }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Document
             file={file}
             onLoadSuccess={({ numPages: n }) => setNumPages(n)}
-            loading={<div className="p-12"><Loader2 size={40} className="animate-spin text-blue-600" /></div>}
+            loading={<div style={{ padding: '3em' }}><Loader2 size={40} style={{ animation: 'spin 1s linear infinite', color: '#49bf9d' }} /></div>}
           >
-            <Page pageNumber={currentPage} scale={scale} renderTextLayer={true} renderAnnotationLayer={true} className="shadow-lg" />
+            <Page pageNumber={currentPage} scale={scale} renderTextLayer={true} renderAnnotationLayer={true} />
           </Document>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

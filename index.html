@@ -3,68 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Fonts from Striped theme -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700|Raleway:300,400,600,700,800" rel="stylesheet" />
-    
-    <!-- SEO Meta Tags -->
+    <meta name="theme-color" content="#111827" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700|Raleway:300,400,600,700,800"
+      rel="stylesheet"
+    />
+
     <title>PDFNova - Free Online PDF Tools</title>
-    <meta name="description" content="Free online PDF tools to merge, split, compress, convert PDF to JPG, Word, and more. Fast, secure, and works entirely in your browser." />
-    <meta name="keywords" content="PDF tools, merge PDF, split PDF, compress PDF, PDF to JPG, JPG to PDF, PDF converter, free PDF tools" />
-    
-    <!-- Open Graph -->
+    <meta
+      name="description"
+      content="Free online PDF tools to merge, split, compress, convert PDF to JPG, Word, and more. Fast, private, and browser-based."
+    />
+    <meta
+      name="keywords"
+      content="PDF tools, merge PDF, split PDF, compress PDF, PDF to JPG, JPG to PDF, PDF converter, free PDF tools"
+    />
+    <meta name="robots" content="index,follow" />
+
     <meta property="og:title" content="PDFNova - Free Online PDF Tools" />
-    <meta property="og:description" content="Every PDF tool you need. Merge, split, compress, convert PDFs for free." />
-    
-    <!-- Structured Data -->
+    <meta
+      property="og:description"
+      content="Every PDF tool you need. Merge, split, compress, convert PDFs for free."
+    />
+
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "PDFNova",
-      "description": "Free online PDF tools to merge, split, compress, convert, and edit PDF files.",
-      "applicationCategory": "ProductivityApplication",
-      "operatingSystem": "Any",
-      "offers": { "@type": "Offer", "price": "0" }
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PDFNova",
+        "description": "Free online PDF tools to merge, split, compress, convert, and edit PDF files.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Any",
+        "offers": { "@type": "Offer", "price": "0" }
+      }
     </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    
-    <!-- Firebase SDK -->
-    <!-- 
-      NOTE: Firebase API keys are SAFE to be public. This is by design.
-      Real security comes from Firebase Security Rules and domain restrictions.
-      See SECURITY.md for more information.
-    -->
-    <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-      
-      // Your web app's Firebase configuration
-      // This is SAFE to be public - see SECURITY.md
-      const firebaseConfig = {
-        apiKey: "AIzaSyD0hJbbA4W1X1A1I93Ck84OkKO9mgbYdAE",
-        authDomain: "pdfnova-8ff02.firebaseapp.com",
-        projectId: "pdfnova-8ff02",
-        storageBucket: "pdfnova-8ff02.firebasestorage.app",
-        messagingSenderId: "730708623460",
-        appId: "1:730708623460:web:9ae969c4ade2722f88df71",
-        measurementId: "G-JWJL9984RQ"
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-      
-      // Make Firebase available globally if needed
-      window.firebaseApp = app;
-      window.firebaseAnalytics = analytics;
-      
-      console.log('✅ PDFNova Firebase initialized successfully');
-    </script>
   </body>
 </html>

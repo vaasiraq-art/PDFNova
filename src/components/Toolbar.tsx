@@ -9,6 +9,9 @@ import {
   X,
   FileText,
   Bot,
+  FlipHorizontal,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import { Bookmark } from '../types';
 
@@ -21,6 +24,8 @@ interface ToolbarProps {
   showSearch: boolean;
   searchQuery: string;
   aiPanelOpen: boolean;
+  flipEnabled: boolean;
+  soundEnabled: boolean;
   onPageChange: (page: number) => void;
   onZoomIn: () => void;
   onZoomOut: () => void;
@@ -28,6 +33,8 @@ interface ToolbarProps {
   onToggleDarkMode: () => void;
   onToggleSidebar: () => void;
   onToggleAI: () => void;
+  onToggleFlip: () => void;
+  onToggleSound: () => void;
   onAddBookmark: () => void;
   onReset: () => void;
   onToggleSearch: () => void;
@@ -44,6 +51,8 @@ export default function Toolbar({
   showSearch,
   searchQuery,
   aiPanelOpen,
+  flipEnabled,
+  soundEnabled,
   onPageChange,
   onZoomIn,
   onZoomOut,
@@ -51,6 +60,8 @@ export default function Toolbar({
   onToggleDarkMode,
   onToggleSidebar,
   onToggleAI,
+  onToggleFlip,
+  onToggleSound,
   onAddBookmark,
   onReset,
   onToggleSearch,
@@ -171,6 +182,36 @@ export default function Toolbar({
             title="AI Assistant"
           >
             <Bot size={18} />
+          </button>
+
+          {/* Page Flip Animation */}
+          <button
+            onClick={onToggleFlip}
+            className={`p-2 rounded-lg transition-all ${
+              flipEnabled
+                ? 'text-emerald-500 bg-emerald-500/10'
+                : darkMode
+                ? 'hover:bg-gray-700 text-gray-300'
+                : 'hover:bg-gray-100 text-gray-600'
+            }`}
+            title={flipEnabled ? 'Disable page flip animation' : 'Enable page flip animation'}
+          >
+            <FlipHorizontal size={18} />
+          </button>
+
+          {/* Sound Toggle */}
+          <button
+            onClick={onToggleSound}
+            className={`p-2 rounded-lg transition-all ${
+              soundEnabled
+                ? 'text-blue-500 bg-blue-500/10'
+                : darkMode
+                ? 'hover:bg-gray-700 text-gray-300'
+                : 'hover:bg-gray-100 text-gray-600'
+            }`}
+            title={soundEnabled ? 'Mute page flip sound' : 'Enable page flip sound'}
+          >
+            {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>
 
           {/* Dark mode */}

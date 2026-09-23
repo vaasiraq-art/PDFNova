@@ -25,6 +25,8 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [aiPanelOpen, setAiPanelOpen] = useState<boolean>(false);
+  const [flipEnabled, setFlipEnabled] = useState<boolean>(true);
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('pdf-reader-bookmarks');
@@ -122,6 +124,8 @@ export default function App() {
         showSearch={showSearch}
         searchQuery={searchQuery}
         aiPanelOpen={aiPanelOpen}
+        flipEnabled={flipEnabled}
+        soundEnabled={soundEnabled}
         onPageChange={handlePageChange}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
@@ -129,6 +133,12 @@ export default function App() {
         onToggleDarkMode={toggleDarkMode}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         onToggleAI={() => setAiPanelOpen(!aiPanelOpen)}
+        onToggleFlip={() => setFlipEnabled(!flipEnabled)}
+        onToggleSound={() => {
+          const newState = !soundEnabled;
+          setSoundEnabled(newState);
+          localStorage.setItem('pdf-reader-sound', String(newState));
+        }}
         onAddBookmark={addBookmark}
         onReset={handleReset}
         onToggleSearch={() => setShowSearch(!showSearch)}
@@ -155,6 +165,8 @@ export default function App() {
             currentPage={currentPage}
             scale={scale}
             darkMode={darkMode}
+            flipEnabled={flipEnabled}
+            soundEnabled={soundEnabled}
             onDocumentLoadSuccess={handleDocumentLoadSuccess}
             onPageChange={handlePageChange}
             settings={settings}

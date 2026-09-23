@@ -99,11 +99,16 @@ export default function UploadScreen({ onFileUpload, darkMode, toggleDarkMode }:
         />
       </main>
 
-      <section className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl w-full" aria-label="Features">
+      <section className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-4 max-w-3xl w-full" aria-label="Features">
         <article className={`p-4 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white/80 backdrop-blur'}`}>
           <div className="text-2xl mb-2">🤖</div>
           <h2 className="font-medium mb-1">AI Assistant</h2>
           <p className="text-sm opacity-70">Ask questions, get summaries, and analyze your book with AI</p>
+        </article>
+        <article className={`p-4 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white/80 backdrop-blur'}`}>
+          <div className="text-2xl mb-2">📖</div>
+          <h2 className="font-medium mb-1">Page Flip</h2>
+          <p className="text-sm opacity-70">Realistic 3D paper flip animation with sound effects</p>
         </article>
         <article className={`p-4 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white/80 backdrop-blur'}`}>
           <div className="text-2xl mb-2">📑</div>

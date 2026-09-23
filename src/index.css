@@ -121,6 +121,51 @@ textarea:focus-visible {
   }
 }
 
+/* Page flip animation styles */
+.page-flip-wrapper {
+  will-change: transform;
+}
+
+.page-container {
+  position: relative;
+  transition: transform 0.1s ease;
+}
+
+/* Prevent text selection during flip */
+.page-flip-wrapper * {
+  user-select: none !important;
+}
+
+/* Smooth 3D rendering */
+.page-flip-wrapper,
+.page-container {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Page flip sound indicator */
+@keyframes pageFlipSound {
+  0% { transform: scale(1); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* Book-like shadow effect */
+@keyframes bookShadow {
+  0% { box-shadow: 0 0 0 rgba(0,0,0,0); }
+  50% { box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  100% { box-shadow: 0 0 0 rgba(0,0,0,0); }
+}
+
+/* Page curl corner effect */
+@keyframes pageCurl {
+  0% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  50% { clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 0 100%); }
+  100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
 /* Responsive text */
 @media (max-width: 640px) {
   .pdf-page canvas {

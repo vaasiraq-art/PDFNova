@@ -1,89 +1,69 @@
-# 🚀 Deploy PDFNova to Firebase
+# PDFNova — GitHub to Firebase Hosting
 
-Your Firebase project is already configured! Here's how to deploy.
+Firebase project: `pdfnova-8ff02`
 
-## ✅ Firebase Configuration (Already Done)
+Firebase Hosting site target: `pdfnova`
 
-Your project ID: **pdfnova-8ff02**
-Your site will be at: **https://pdfnova-8ff02.web.app**
+Live URL:
 
-## 🎯 Deployment Options
+https://pdfnova.web.app
 
-### Option 1: Firebase Console (Browser Only - No Terminal)
+## 1. One-time Firebase setup
 
-Since you're working in a browser, here's the easiest way:
-
-1. **Go to Firebase Console**
-   - Open: https://console.firebase.google.com/
-   - Your project "pdfnova-8ff02" should already exist
-
-2. **Go to Hosting**
-   - In the left menu, click **Build** → **Hosting**
-   - Click **Get Started**
-
-3. **Connect GitHub (Recommended)**
-   - Click **Connect GitHub**
-   - Select your repository
-   - Configure:
-     - **Build command:** `npm run build`
-     - **Output directory:** `dist`
-   - Click **Deploy**
-
-4. **Your site is live!**
-   - URL: https://pdfnova-8ff02.web.app
-
-### Option 2: Firebase CLI (If You Have Terminal Access)
+From the project root:
 
 ```bash
-# Install Firebase CLI
-npm install -g firebase-tools
-
-# Login
 firebase login
-
-# Deploy
-firebase deploy --only hosting
+firebase target:apply hosting pdfnova pdfnova
+firebase init hosting:github
 ```
 
-Your site will be live at: **https://pdfnova-8ff02.web.app**
+Select the Firebase project `pdfnova-8ff02` and the existing Hosting site `pdfnova`.
 
-## 📋 What's Configured
+Firebase's GitHub setup creates/encrypts the deployment credential and stores it as a GitHub Actions secret.
 
-✅ Firebase SDK added to index.html  
-✅ Analytics enabled  
-✅ Project ID: pdfnova-8ff02  
-✅ Hosting configuration ready  
+## 2. GitHub secret
 
-## 🔧 Firebase Features Available
+The workflow expects:
 
-Your Firebase config includes:
-- **Analytics** - Track user behavior
-- **Hosting** - Deploy your website
-- **Authentication** - Add user login (if needed later)
-- **Firestore** - Database (if needed later)
-- **Storage** - File storage (if needed later)
+`FIREBASE_SERVICE_ACCOUNT`
 
-## 📊 View Analytics
+GitHub path:
 
-Once deployed, view your analytics at:
-https://console.firebase.google.com/project/pdfnova-8ff02/analytics
+**Settings → Secrets and variables → Actions**
 
-## 🌐 Custom Domain (Optional)
+Never commit the service-account JSON to this repository.
 
-To use a custom domain:
+## 3. Production workflow
 
-1. Go to Firebase Console → Hosting
-2. Click **Add custom domain**
-3. Follow the instructions to verify ownership
-4. Add DNS records as instructed
-5. Wait for SSL certificate (usually 24 hours)
+Every push to `main` triggers:
 
-## 🆘 Need Help?
+```
+npm ci
+npm run typecheck
+npm run build
+Firebase Hosting deploy -> target pdfnova -> live channel
+```
 
-- **Firebase Hosting Docs:** https://firebase.google.com/docs/hosting
-- **Firebase Console:** https://console.firebase.google.com/project/pdfnova-8ff02
-- **Browser Deployment Guide:** See BROWSER-DEPLOY.md
+## 4. Local deployment
 
----
+```bash
+npm ci
+npm run typecheck
+npm run build
+firebase deploy --only hosting:pdfnova
+```
 
-**Your Firebase project is ready! Deploy and go live at https://pdfnova-8ff02.web.app** 🚀
+## 5. Security
+
+See [SECURITY.md](./SECURITY.md).
+
+The application no longer includes Firebase SDK initialization in `index.html` because Firebase Hosting does not require it.
+
+## 6. Production protection
+
+In GitHub, use:
+
+**Settings → Environments → production**
+
+You can add required reviewers or other environment protection rules before live deployment.

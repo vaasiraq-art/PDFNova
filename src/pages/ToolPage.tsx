@@ -15,15 +15,12 @@ export default function ToolPage() {
 
   if (!tool) {
     return (
-      <article className="box post">
-        <header>
-          <h2>Tool Not Found</h2>
-          <p>The requested tool could not be found</p>
-        </header>
-        <p>
-          <Link to="/">← Back to all tools</Link>
-        </p>
-      </article>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Tool Not Found</h1>
+          <Link to="/" className="text-blue-600 hover:text-blue-700 font-medium">← Back to all tools</Link>
+        </div>
+      </div>
     );
   }
 
@@ -37,6 +34,7 @@ function ToolProcessor({ tool }: { tool: typeof tools[0] }) {
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [options, setOptions] = useState<Record<string, any>>({});
+  const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isMultiple = tool.multiple || tool.id === 'merge-pdf';
@@ -49,6 +47,12 @@ function ToolProcessor({ tool }: { tool: typeof tools[0] }) {
     setResult(null);
     if (resultUrl) URL.revokeObjectURL(resultUrl);
     setResultUrl(null);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    handleFiles(e.dataTransfer.files);
   };
 
   const removeFile = (index: number) => {
@@ -105,189 +109,263 @@ function ToolProcessor({ tool }: { tool: typeof tools[0] }) {
     setError(null);
   };
 
-  const today = new Date();
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
   return (
-    <article className="box post">
-      <header>
-        <h2>{tool.name}</h2>
-        <p>{tool.description}</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/" className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">P</span>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                PDFNova
+              </span>
+            </Link>
+            <Link to="/" className="text-gray-500 hover:text-blue-600 text-sm font-medium transition-colors">
+              ← All Tools
+            </Link>
+          </div>
+        </div>
       </header>
-      <div className="info">
-        <span className="date">
-          <span className="month">{months[today.getMonth()]}</span>
-          <span className="day">{today.getDate()}</span>
-          <span className="year">, {today.getFullYear()}</span>
-        </span>
-        <ul className="stats">
-          <li><a href="#">Free</a></li>
-          <li><a href="#">{tool.category}</a></li>
-        </ul>
-      </div>
 
-      {/* Upload Area */}
-      {!result && (
-        <div style={{ border: '2px dashed #ddd', padding: '3em', textAlign: 'center', marginBottom: '1.5em' }}>
-          <p style={{ marginBottom: '1em' }}>
-            <strong>Select files to process</strong>
-          </p>
-          <p style={{ marginBottom: '1.5em', fontSize: '0.9em' }}>
-            {files.length === 0 ? 'No files selected' : `${files.length} file(s) selected`}
-          </p>
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="button"
+      {/* Tool Content */}
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Tool Header */}
+        <div className="text-center mb-10">
+          <div className={`w-16 h-16 ${tool.color} rounded-2xl flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4 shadow-lg`}>
+            {tool.icon}
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{tool.name}</h1>
+          <p className="text-gray-500 text-lg">{tool.description}</p>
+        </div>
+
+        {/* Upload Area */}
+        {!result && (
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleDrop}
+            className={`bg-white rounded-2xl border-2 border-dashed p-12 text-center transition-all ${
+              dragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
+            }`}
           >
-            Choose Files
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept={tool.acceptTypes || '.pdf'}
-            multiple={isMultiple}
-            onChange={(e) => handleFiles(e.target.files)}
-            style={{ display: 'none' }}
-          />
+            <div className="mb-6">
+              <svg className="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+              </svg>
+            </div>
+            <p className="text-lg font-medium text-gray-700 mb-2">
+              {files.length === 0 ? 'Drop your files here' : `${files.length} file(s) selected`}
+            </p>
+            <p className="text-sm text-gray-400 mb-6">or click to browse</p>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105"
+            >
+              Choose Files
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={tool.acceptTypes || '.pdf'}
+              multiple={isMultiple}
+              onChange={(e) => handleFiles(e.target.files)}
+              style={{ display: 'none' }}
+            />
+          </div>
+        )}
+
+        {/* File List */}
+        {files.length > 0 && !result && (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
+            <h3 className="font-bold text-gray-900 mb-4">Selected Files</h3>
+            <div className="space-y-2">
+              {files.map((file, i) => (
+                <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd"/>
+                    </svg>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 truncate max-w-xs">{file.name}</p>
+                      <p className="text-xs text-gray-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                  </div>
+                  {isMultiple && (
+                    <button
+                      onClick={() => removeFile(i)}
+                      className="text-gray-400 hover:text-red-500 transition-colors"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Options */}
+        {files.length > 0 && !result && !processing && (
+          <ToolOptions toolId={tool.id} options={options} setOptions={setOptions} />
+        )}
+
+        {/* Process Button */}
+        {files.length > 0 && !result && (
+          <div className="mt-8 text-center">
+            <button
+              onClick={processFiles}
+              disabled={processing}
+              className={`px-10 py-4 rounded-xl font-bold text-lg transition-all ${
+                processing
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-xl hover:scale-105'
+              }`}
+            >
+              {processing ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Processing...
+                </span>
+              ) : `Process ${tool.name}`}
+            </button>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/>
+              </svg>
+              <span className="font-medium">Error:</span> {error}
+            </div>
+          </div>
+        )}
+
+        {/* Result */}
+        {result && resultUrl && (
+          <div className="bg-white rounded-2xl shadow-lg border border-green-100 p-10 text-center mt-6">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Done!</h3>
+            <p className="text-gray-500 mb-8">Your file is ready to download</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <button
+                onClick={downloadResult}
+                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105"
+              >
+                Download File
+              </button>
+              <button
+                onClick={reset}
+                className="px-8 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all"
+              >
+                Process Another
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Info */}
+        <div className="mt-12 bg-white rounded-2xl border border-gray-100 p-6">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 className="font-bold text-gray-900 mb-1">About {tool.name}</h4>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {tool.description}. All processing happens in your browser — your files are never uploaded to any server. 
+                This tool is completely free with no registration required.
+              </p>
+            </div>
+          </div>
         </div>
-      )}
-
-      {/* File List */}
-      {files.length > 0 && !result && (
-        <div style={{ marginBottom: '1.5em' }}>
-          <h3>Selected Files</h3>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            {files.map((file, i) => (
-              <li key={i} style={{ padding: '0.5em 0', borderBottom: '1px solid #eee' }}>
-                {file.name} ({(file.size / 1024 / 1024).toFixed(1)} MB)
-                {isMultiple && (
-                  <button 
-                    onClick={() => removeFile(i)}
-                    style={{ marginLeft: '1em', color: '#e74c3c', background: 'none', border: 'none', cursor: 'pointer' }}
-                  >
-                    Remove
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Options */}
-      {files.length > 0 && !result && !processing && (
-        <ToolOptions toolId={tool.id} options={options} setOptions={setOptions} />
-      )}
-
-      {/* Process Button */}
-      {files.length > 0 && !result && (
-        <p>
-          <button
-            onClick={processFiles}
-            disabled={processing}
-            className="button"
-            style={{ opacity: processing ? 0.5 : 1 }}
-          >
-            {processing ? 'Processing...' : `Process ${tool.name}`}
-          </button>
-        </p>
-      )}
-
-      {/* Error */}
-      {error && (
-        <p style={{ color: '#e74c3c', padding: '1em', background: '#fdf0f0', borderRadius: '0.3em' }}>
-          <strong>Error:</strong> {error}
-        </p>
-      )}
-
-      {/* Result */}
-      {result && resultUrl && (
-        <div style={{ padding: '2em', background: '#f0fdf4', borderRadius: '0.3em', textAlign: 'center' }}>
-          <h3 style={{ color: '#27ae60', marginBottom: '0.5em' }}>✓ Complete!</h3>
-          <p style={{ marginBottom: '1.5em' }}>Your file is ready to download</p>
-          <button onClick={downloadResult} className="button" style={{ marginRight: '0.5em' }}>
-            Download
-          </button>
-          <button onClick={reset} className="button" style={{ background: '#95a5a6' }}>
-            Process Another
-          </button>
-        </div>
-      )}
-
-      {/* Info */}
-      <p style={{ marginTop: '2em', padding: '1.5em', background: '#f8f9fa', borderRadius: '0.3em' }}>
-        <strong>About {tool.name}:</strong> {tool.description}. All processing happens in your browser. 
-        Your files are never uploaded to any server. This tool is completely free with no registration required.
-      </p>
-    </article>
+      </main>
+    </div>
   );
 }
 
 function ToolOptions({ toolId, options, setOptions }: { toolId: string; options: Record<string, any>; setOptions: (o: Record<string, any>) => void }) {
-  const inputStyle = {
-    width: '100%',
-    padding: '0.8em',
-    border: '1px solid #ddd',
-    borderRadius: '0.3em',
-    fontFamily: 'Source Sans Pro, sans-serif',
-    marginBottom: '1em'
-  };
-
   if (toolId === 'rotate-pdf') {
     return (
-      <div style={{ marginBottom: '1.5em' }}>
-        <h3>Options</h3>
-        <label style={{ display: 'block', marginBottom: '0.5em' }}>Rotation Angle</label>
-        <select 
-          value={options.angle || 90} 
-          onChange={(e) => setOptions({ ...options, angle: Number(e.target.value) })}
-          style={inputStyle}
-        >
-          <option value={90}>90° Clockwise</option>
-          <option value={180}>180°</option>
-          <option value={270}>270° Counter-clockwise</option>
-        </select>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
+        <h3 className="font-bold text-gray-900 mb-4">Rotation Angle</h3>
+        <div className="grid grid-cols-3 gap-3">
+          {[{v: 90, l: '90°'}, {v: 180, l: '180°'}, {v: 270, l: '270°'}].map(opt => (
+            <button
+              key={opt.v}
+              onClick={() => setOptions({ ...options, angle: opt.v })}
+              className={`py-3 rounded-xl font-medium transition-all ${
+                (options.angle || 90) === opt.v
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {opt.l}
+            </button>
+          ))}
+        </div>
       </div>
     );
   }
 
   if (toolId === 'add-page-numbers') {
     return (
-      <div style={{ marginBottom: '1.5em' }}>
-        <h3>Options</h3>
-        <label style={{ display: 'block', marginBottom: '0.5em' }}>Position</label>
-        <select 
-          value={options.position || 'bottom-center'} 
-          onChange={(e) => setOptions({ ...options, position: e.target.value })}
-          style={inputStyle}
-        >
-          <option value="bottom-center">Bottom Center</option>
-          <option value="bottom-right">Bottom Right</option>
-          <option value="top-center">Top Center</option>
-          <option value="top-right">Top Right</option>
-        </select>
-        <label style={{ display: 'block', marginBottom: '0.5em' }}>Start Number</label>
-        <input 
-          type="number" 
-          min={1} 
-          value={options.startNumber || 1} 
-          onChange={(e) => setOptions({ ...options, startNumber: Number(e.target.value) })}
-          style={inputStyle}
-        />
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
+        <h3 className="font-bold text-gray-900 mb-4">Options</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Position</label>
+            <select
+              value={options.position || 'bottom-center'}
+              onChange={(e) => setOptions({ ...options, position: e.target.value })}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+            >
+              <option value="bottom-center">Bottom Center</option>
+              <option value="bottom-right">Bottom Right</option>
+              <option value="top-center">Top Center</option>
+              <option value="top-right">Top Right</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Start Number</label>
+            <input
+              type="number"
+              min={1}
+              value={options.startNumber || 1}
+              onChange={(e) => setOptions({ ...options, startNumber: Number(e.target.value) })}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+            />
+          </div>
+        </div>
       </div>
     );
   }
 
   if (toolId === 'watermark-pdf') {
     return (
-      <div style={{ marginBottom: '1.5em' }}>
-        <h3>Options</h3>
-        <label style={{ display: 'block', marginBottom: '0.5em' }}>Watermark Text</label>
-        <input 
-          type="text" 
-          value={options.text || 'CONFIDENTIAL'} 
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
+        <h3 className="font-bold text-gray-900 mb-4">Watermark Text</h3>
+        <input
+          type="text"
+          value={options.text || 'CONFIDENTIAL'}
           onChange={(e) => setOptions({ ...options, text: e.target.value })}
-          style={inputStyle}
+          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
           placeholder="Enter watermark text"
         />
       </div>
@@ -296,16 +374,16 @@ function ToolOptions({ toolId, options, setOptions }: { toolId: string; options:
 
   if (toolId === 'split-pdf') {
     return (
-      <div style={{ marginBottom: '1.5em' }}>
-        <h3>Options</h3>
-        <label style={{ display: 'block', marginBottom: '0.5em' }}>Page Range (e.g., 1-3, 5, 7-10)</label>
-        <input 
-          type="text" 
-          value={options.range || ''} 
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
+        <h3 className="font-bold text-gray-900 mb-4">Page Range</h3>
+        <input
+          type="text"
+          value={options.range || ''}
           onChange={(e) => setOptions({ ...options, range: e.target.value })}
-          style={inputStyle}
-          placeholder="Leave empty for first half"
+          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+          placeholder="e.g., 1-3, 5, 7-10"
         />
+        <p className="text-xs text-gray-400 mt-2">Leave empty to extract first half</p>
       </div>
     );
   }
@@ -313,7 +391,7 @@ function ToolOptions({ toolId, options, setOptions }: { toolId: string; options:
   return null;
 }
 
-// Tool implementations (same as before)
+// Tool implementations
 async function mergePDFs(files: File[]): Promise<Blob> {
   const mergedPdf = await PDFDocument.create();
   for (const file of files) {

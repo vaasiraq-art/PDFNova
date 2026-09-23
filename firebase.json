@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "pdfnova",
     "public": "dist",
     "ignore": [
       "firebase.json",

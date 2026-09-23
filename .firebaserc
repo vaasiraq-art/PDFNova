@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "pdfnova-8ff02"
+  },
+  "targets": {
+    "pdfnova-8ff02": {
+      "hosting": {
+        "pdfnova": [
+          "pdfnova"
+        ]
+      }
+    }
   }
 }

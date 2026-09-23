@@ -1,97 +1,173 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PDF Book Reader</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    
+    <!-- Primary Meta Tags -->
+    <title>PDF Book Reader - AI-Powered Online PDF Reader with Smart Features</title>
+    <meta name="title" content="PDF Book Reader - AI-Powered Online PDF Reader with Smart Features" />
+    <meta name="description" content="Free online PDF book reader with AI assistant, bookmarks, dark mode, and smart navigation. Upload your PDF books and enjoy an enhanced reading experience with AI-powered summaries, Q&A, and text analysis." />
+    <meta name="keywords" content="PDF reader, online PDF viewer, AI book reader, PDF book reader, read PDF online, free PDF reader, AI reading assistant, PDF summarizer, ebook reader, digital book reader, PDF bookmarks, dark mode reader" />
+    <meta name="author" content="PDF Book Reader" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://pdf-book-reader.app" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pdf-book-reader.app" />
+    <meta property="og:title" content="PDF Book Reader - AI-Powered Online PDF Reader" />
+    <meta property="og:description" content="Free online PDF book reader with AI assistant. Upload your PDF books and enjoy AI-powered summaries, Q&A, bookmarks, dark mode, and smart navigation." />
+    <meta property="og:image" content="https://pdf-book-reader.app/og-image.png" />
+    <meta property="og:site_name" content="PDF Book Reader" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://pdf-book-reader.app" />
+    <meta name="twitter:title" content="PDF Book Reader - AI-Powered Online PDF Reader" />
+    <meta name="twitter:description" content="Free online PDF book reader with AI assistant. Upload your PDF books and enjoy AI-powered summaries, Q&A, bookmarks, dark mode, and smart navigation." />
+    <meta name="twitter:image" content="https://pdf-book-reader.app/og-image.png" />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PDF Reader" />
+    <meta name="application-name" content="PDF Book Reader" />
+    <meta name="msapplication-TileColor" content="#6366f1" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>" />
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+    <link rel="preconnect" href="https://api.openai.com" />
+    
+    <!-- Structured Data - WebApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "PDF Book Reader",
+      "url": "https://pdf-book-reader.app",
+      "description": "Free online PDF book reader with AI assistant, bookmarks, dark mode, and smart navigation features.",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "AI-Powered Reading Assistant",
+        "PDF Text Extraction & Analysis",
+        "Smart Bookmarks",
+        "Dark Mode Reading",
+        "Page Navigation & Quick Jump",
+        "Zoom Controls",
+        "Reading Progress Tracking",
+        "Keyboard Shortcuts",
+        "Local Storage for Preferences",
+        "OpenAI Integration for Advanced AI"
+      ],
+      "browserRequirements": "Requires a modern web browser with JavaScript enabled"
+    }
+    </script>
+    
+    <!-- Structured Data - FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I read a PDF book online?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply upload your PDF file using the drag-and-drop area or click to browse. The PDF will render instantly in your browser with full navigation controls."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the AI assistant work without an API key?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! The app includes built-in local text analysis that can summarize content, extract key points, and provide text statistics. For advanced AI conversations, you can optionally add your OpenAI API key."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are my PDF files uploaded to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. All PDF processing happens entirely in your browser. Your files never leave your device. Bookmarks and preferences are stored locally using browser storage."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use this PDF reader on mobile?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the PDF Book Reader is fully responsive and works on all devices including smartphones, tablets, and desktop computers."
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://pdf-book-reader.app"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "PDF Reader",
+          "item": "https://pdf-book-reader.app/reader"
+        }
+      ]
+    }
+    </script>
+
     <style>
-      /* 内联样式确保主题色立即生效，避免闪烁 */
-      html,
-      body {
+      html, body {
         margin: 0;
         padding: 0;
         width: 100%;
         height: 100%;
       }
-      html.light,
-      html.light body {
-        background-color: #ffffff !important;
-        color: #000000;
+      html.light, html.light body {
+        background-color: #f9fafb !important;
+        color: #111827;
       }
-      html.dark,
-      html.dark body {
-        background-color: #1a1a1a !important;
-        color: #ffffff;
+      html.dark, html.dark body {
+        background-color: #111827 !important;
+        color: #f9fafb;
       }
     </style>
-    <script>
-      // 在 React 加载前立即设置主题，避免闪烁
-      (function () {
-        const isInIframe = window.self !== window.top;
-
-        function applyThemeToDOM(theme) {
-          document.documentElement.classList.remove("light", "dark");
-          document.documentElement.classList.add(theme);
-          document.documentElement.setAttribute("data-theme", theme);
-        }
-
-        if (isInIframe) {
-          // 监听父窗口主动推送的主题消息
-          window.addEventListener("message", function (event) {
-            if (event.data && typeof event.data.theme === "string") {
-              const theme = event.data.theme;
-              if (theme === "light" || theme === "dark") {
-                applyThemeToDOM(theme);
-              }
-            }
-          });
-        } else {
-          // 非 iframe 环境，使用默认 light 主题
-          applyThemeToDOM("light");
-        }
-      })();
-    </script>
-      <script>
-      (function () {
-        if (window.self === window.top) return;
-        var reported = {};
-        window.addEventListener("error", function (event) {
-          // 资源加载失败的 error 事件没有 message，此处仅上报 JS 运行时错误
-          if (!event || !event.message) return;
-          var key =
-            event.message + "|" + (event.filename || "") + "|" + (event.lineno || 0);
-          if (reported[key]) return; // 相同错误只上报一次，避免渲染循环刷屏
-          reported[key] = true;
-          try {
-            window.parent.postMessage(
-              {
-                type: "sandbox-runtime-error",
-                payload: {
-                  message: String(event.message).slice(0, 500),
-                  filename: event.filename || "",
-                  lineno: event.lineno || 0,
-                  colno: event.colno || 0,
-                  stack:
-                    event.error && event.error.stack
-                      ? String(event.error.stack).slice(0, 2000)
-                      : ""
-                }
-              },
-              "*"
-            );
-          } catch (e) {
-            /* 上报失败不影响页面运行 */
-          }
-        });
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

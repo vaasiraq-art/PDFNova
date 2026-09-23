@@ -4,6 +4,7 @@ import UploadScreen from './components/UploadScreen';
 import PDFViewer from './components/PDFViewer';
 import Toolbar from './components/Toolbar';
 import Sidebar from './components/Sidebar';
+import AIPanel from './components/AIPanel';
 import { Bookmark, ReadingSettings } from './types';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
@@ -23,6 +24,7 @@ export default function App() {
   });
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [aiPanelOpen, setAiPanelOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('pdf-reader-bookmarks');
@@ -119,12 +121,14 @@ export default function App() {
         bookmarks={bookmarks}
         showSearch={showSearch}
         searchQuery={searchQuery}
+        aiPanelOpen={aiPanelOpen}
         onPageChange={handlePageChange}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
         onResetZoom={handleResetZoom}
         onToggleDarkMode={toggleDarkMode}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        onToggleAI={() => setAiPanelOpen(!aiPanelOpen)}
         onAddBookmark={addBookmark}
         onReset={handleReset}
         onToggleSearch={() => setShowSearch(!showSearch)}
@@ -156,6 +160,16 @@ export default function App() {
             settings={settings}
           />
         </div>
+
+        {aiPanelOpen && (
+          <AIPanel
+            file={file}
+            currentPage={currentPage}
+            numPages={numPages}
+            darkMode={darkMode}
+            onClose={() => setAiPanelOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

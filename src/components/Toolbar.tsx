@@ -8,6 +8,7 @@ import {
   Search,
   X,
   FileText,
+  Bot,
 } from 'lucide-react';
 import { Bookmark } from '../types';
 
@@ -19,12 +20,14 @@ interface ToolbarProps {
   bookmarks: Bookmark[];
   showSearch: boolean;
   searchQuery: string;
+  aiPanelOpen: boolean;
   onPageChange: (page: number) => void;
   onZoomIn: () => void;
   onZoomOut: () => void;
   onResetZoom: () => void;
   onToggleDarkMode: () => void;
   onToggleSidebar: () => void;
+  onToggleAI: () => void;
   onAddBookmark: () => void;
   onReset: () => void;
   onToggleSearch: () => void;
@@ -40,12 +43,14 @@ export default function Toolbar({
   bookmarks,
   showSearch,
   searchQuery,
+  aiPanelOpen,
   onPageChange,
   onZoomIn,
   onZoomOut,
   onResetZoom,
   onToggleDarkMode,
   onToggleSidebar,
+  onToggleAI,
   onAddBookmark,
   onReset,
   onToggleSearch,
@@ -151,6 +156,21 @@ export default function Toolbar({
             title="Search"
           >
             <Search size={18} />
+          </button>
+
+          {/* AI Assistant */}
+          <button
+            onClick={onToggleAI}
+            className={`p-2 rounded-lg transition-all ${
+              aiPanelOpen
+                ? 'text-purple-500 bg-purple-500/10'
+                : darkMode
+                ? 'hover:bg-gray-700 text-gray-300'
+                : 'hover:bg-gray-100 text-gray-600'
+            }`}
+            title="AI Assistant"
+          >
+            <Bot size={18} />
           </button>
 
           {/* Dark mode */}

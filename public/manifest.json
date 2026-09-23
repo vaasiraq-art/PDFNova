@@ -1,0 +1,20 @@
+{
+  "name": "PDF Book Reader",
+  "short_name": "PDF Reader",
+  "description": "AI-powered online PDF book reader with smart features like bookmarks, dark mode, text analysis, and AI assistant.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#6366f1",
+  "orientation": "any",
+  "categories": ["productivity", "education", "books"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "lang": "en",
+  "dir": "ltr"
+}

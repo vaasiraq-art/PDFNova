@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { pdfjs, Document, Page } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, BookOpen, Loader2 } from 'lucide-react';
+import { Upload, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, BookOpen, Loader2 } from 'lucide-react';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -62,11 +62,11 @@ export default function PDFReader() {
             <p style={{ fontSize: '0.9em', color: '#888' }}>
               or drag and drop
             </p>
-            <input
-              type="file"
-              accept=".pdf,application/pdf"
-              onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
-              style={{ display: 'none' }}
+            <input 
+              type="file" 
+              accept=".pdf" 
+              onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])} 
+              style={{ display: 'none' }} 
             />
           </label>
         </div>
@@ -91,6 +91,7 @@ export default function PDFReader() {
         </ul>
       </div>
 
+      {/* Toolbar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1em 0', borderBottom: '1px solid #eee', marginBottom: '1.5em' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
           <button onClick={() => setFile(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#49bf9d' }}>
@@ -116,6 +117,7 @@ export default function PDFReader() {
         </div>
       </div>
 
+      {/* PDF Content */}
       <div style={{ overflow: 'auto', maxHeight: '70vh', background: '#f5f5f5', padding: '1em' }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Document

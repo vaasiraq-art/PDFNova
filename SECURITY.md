@@ -1,47 +1,72 @@
 # PDFNova Security
 
-## GitHub -> Firebase deployment
+## Hosting and deployment
 
-PDFNova is a Vite/React single-page application deployed with Firebase Hosting.
+PDFNova is a Vite/React single-page application deployed as static content with Firebase Hosting.
+The repository does **not** need a Firebase service-account JSON file. GitHub Actions should receive the deployment credential only through a GitHub Actions secret named `FIREBASE_SERVICE_ACCOUNT`.
 
-The repository must never contain a Firebase service-account JSON file, private key, GitHub token, or other deployment credential. GitHub Actions should receive the Firebase deployment credential only through the encrypted GitHub Actions secret:
+Never commit:
+
+- Firebase service-account JSON files
+- private keys
+- `.env` files containing secrets
+- access tokens or passwords
+
+The repository `.gitignore` excludes common local secret and Firebase files.
+
+## Firebase web configuration
+
+Firebase Hosting itself does not require a Firebase Web SDK configuration in `index.html`. PDFNova therefore does not ship a Firebase API key just to host the website.
+
+If Firebase services such as Authentication, Firestore, Storage, or Analytics are added later, use the official client SDK configuration for those services. Browser Firebase configuration is not equivalent to a service-account credential; authorization must still be enforced with Authentication and Firebase Security Rules where applicable.
+
+For Google API keys used by browser applications, add HTTP-referrer restrictions and API restrictions in Google Cloud Console. Google recommends application restrictions that limit which websites can use a browser key. See:
+https://cloud.google.com/docs/authentication/api-keys
+
+## GitHub Actions security
+
+The production workflow:
+
+- runs only from `main` or from a manual dispatch;
+- grants the job only `contents: read` permission;
+- uses a GitHub Actions secret for Firebase deployment credentials;
+- uses an environment named `production`, allowing environment protection rules to be added in GitHub;
+- builds from the lockfile with `npm ci` before deployment.
+
+Create the required repository secret in GitHub:
+
+`Settings -> Secrets and variables -> Actions -> New repository secret`
+
+Name:
 
 `FIREBASE_SERVICE_ACCOUNT`
 
-The production workflow runs only from `main` or by manual dispatch and grants the job only `contents: read`.
+The value must be the complete service-account JSON created by Firebase's GitHub setup flow.
 
-## Firebase Web configuration
+## Firebase Hosting headers
 
-Firebase Hosting does not require the Firebase Web SDK configuration in `index.html`. PDFNova therefore does not ship a Firebase API key just to host the site.
-
-If Firebase Authentication, Firestore, Storage, or Analytics is added later, use the official client SDK configuration for that feature and enforce authorization with Firebase Authentication and Security Rules where applicable.
-
-A browser Firebase API key is not equivalent to a service-account private key. For Google browser API keys, use application restrictions and API restrictions in Google Cloud Console.
-
-## Firebase Hosting hardening
-
-The current `firebase.json` enables:
+`firebase.json` enables:
 
 - Content Security Policy (CSP)
 - clickjacking protection with `frame-ancestors` and `X-Frame-Options`
-- MIME-sniffing protection
+- MIME sniffing protection
 - strict referrer handling
-- restrictive Permissions Policy
-- HSTS
-- immutable caching for static assets
-- no-store caching for `index.html`
+- a restrictive Permissions Policy
+- HTTPS-only transport enforcement via HSTS
+- immutable caching for fingerprinted assets
+- no-store caching for `index.html` so new deployments are picked up promptly
 
-Review the CSP whenever a third-party script, API, worker, analytics SDK, or external asset provider is added.
+Review the CSP whenever a new third-party script, analytics SDK, API, worker, or external asset provider is added.
 
 ## Client-side PDF privacy
 
-PDFNova's core PDF processing is designed to happen in the browser. Do not describe a tool as server-side private processing unless a backend has actually been added and verified.
+PDFNova's core PDF processing is designed to happen in the user's browser. Do not describe a tool as server-side private processing unless a backend has actually been added and verified.
 
 ## Incident response
 
-If a credential is accidentally committed:
+If a Firebase service-account key or another credential is accidentally committed:
 
-1. Revoke or delete the exposed credential immediately.
+1. Revoke/delete the exposed credential immediately.
 2. Create a replacement credential.
 3. Update the GitHub Actions secret.
 4. Remove the credential from repository history where appropriate.

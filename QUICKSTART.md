@@ -24,7 +24,7 @@ npm run build
 firebase deploy
 ```
 
-**That's it!** Your site is live at `https://your-project-id.web.app`
+**That's it!** Your site is live at `https://pdfnova.web.app`
 
 ---
 

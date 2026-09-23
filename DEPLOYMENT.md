@@ -1,51 +1,31 @@
 # PDFNova — GitHub to Firebase Hosting
 
-Firebase project: `pdfnova-8ff02`
+Firebase project: `pdfnova-8ff02`  
+Firebase Hosting site: `pdfnova`  
+Live URL: https://pdfnova.web.app
 
-Firebase Hosting site target: `pdfnova`
+## Recommended GitHub connection
 
-Live URL:
-
-https://pdfnova.web.app
-
-## 1. One-time Firebase setup
-
-From the project root:
+Firebase's supported GitHub Actions setup is:
 
 ```bash
 firebase login
-firebase target:apply hosting pdfnova pdfnova
 firebase init hosting:github
 ```
 
-Select the Firebase project `pdfnova-8ff02` and the existing Hosting site `pdfnova`.
+When prompted, select Firebase project `pdfnova-8ff02` and the Hosting site `pdfnova`. The Firebase CLI creates the deployment service account and stores the credential as a GitHub Actions secret.
 
-Firebase's GitHub setup creates/encrypts the deployment credential and stores it as a GitHub Actions secret.
+The repository workflow is `.github/workflows/deploy.yml`. It runs on pushes to `main`, type-checks the code, builds `dist`, and deploys the `pdfnova` Hosting target to the live channel.
 
-## 2. GitHub secret
+## GitHub secret
 
-The workflow expects:
+If you keep the workflow already committed in this repo, the required GitHub Actions secret is:
 
 `FIREBASE_SERVICE_ACCOUNT`
 
-GitHub path:
+Create it under GitHub → **Settings → Secrets and variables → Actions**. Never commit the service-account JSON to the repository.
 
-**Settings → Secrets and variables → Actions**
-
-Never commit the service-account JSON to this repository.
-
-## 3. Production workflow
-
-Every push to `main` triggers:
-
-```
-npm ci
-npm run typecheck
-npm run build
-Firebase Hosting deploy -> target pdfnova -> live channel
-```
-
-## 4. Local deployment
+## Manual local deploy
 
 ```bash
 npm ci
@@ -54,16 +34,10 @@ npm run build
 firebase deploy --only hosting:pdfnova
 ```
 
-## 5. Security
+## What is intentionally not in the app
 
-See [SECURITY.md](./SECURITY.md).
+Firebase Hosting does not require the Firebase Web SDK configuration in `index.html`, so the deployed site no longer exposes a Firebase API key just for hosting. If you later add Authentication, Firestore, Storage, or Analytics, add only the client SDK/config required for that feature and secure the corresponding data with Firebase rules.
 
-The application no longer includes Firebase SDK initialization in `index.html` because Firebase Hosting does not require it.
+## Security
 
-## 6. Production protection
-
-In GitHub, use:
-
-**Settings → Environments → production**
-
-You can add required reviewers or other environment protection rules before live deployment.
+See `SECURITY.md` for the current security hardening and GitHub Actions guidance.

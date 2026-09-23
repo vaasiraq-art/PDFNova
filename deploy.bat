@@ -46,7 +46,7 @@ echo [OK] Build successful
 REM Deploy
 echo.
 echo [i] Deploying to Firebase...
-call firebase deploy --only hosting
+call firebase deploy --only hosting:pdfnova
 
 if %ERRORLEVEL% EQU 0 (
     echo.
@@ -55,10 +55,10 @@ if %ERRORLEVEL% EQU 0 (
     echo ================================================
     echo.
     echo Your site is live at:
-    echo   - https://your-project-id.web.app
-    echo   - https://your-project-id.firebaseapp.com
+    echo   - https://pdfnova.web.app
+    echo   - https://pdfnova.web.app
     echo.
-    echo Replace 'your-project-id' with your actual Firebase project ID
+    echo The Firebase Hosting target is pdfnova
 ) else (
     echo.
     echo [X] Deployment failed. Check the error messages above.

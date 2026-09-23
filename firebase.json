@@ -1,6 +1,9 @@
 {
   "hosting": {
+    "target": "pdfnova",
     "public": "dist",
+    "cleanUrls": true,
+    "trailingSlash": false,
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -14,11 +17,11 @@
     ],
     "headers": [
       {
-        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp)",
+        "source": "/index.html",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=31536000"
+            "value": "no-cache, no-store, must-revalidate"
           }
         ]
       },
@@ -27,13 +30,26 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=31536000"
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico|woff|woff2)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
           }
         ]
       },
       {
         "source": "**",
         "headers": [
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; worker-src 'self' blob:; connect-src 'self'; upgrade-insecure-requests"
+          },
           {
             "key": "X-Content-Type-Options",
             "value": "nosniff"
@@ -43,12 +59,16 @@
             "value": "DENY"
           },
           {
-            "key": "X-XSS-Protection",
-            "value": "1; mode=block"
-          },
-          {
             "key": "Referrer-Policy",
             "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()"
+          },
+          {
+            "key": "Strict-Transport-Security",
+            "value": "max-age=31536000"
           }
         ]
       }

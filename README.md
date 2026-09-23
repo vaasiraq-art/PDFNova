@@ -195,8 +195,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 🎉 Live Demo
 
 After deployment, your site will be available at:
-- `https://pdfnova.web.app`
-- `https://pdfnova.web.app`
+- `https://your-project-id.web.app`
+- `https://your-project-id.firebaseapp.com`
 
 ---
 

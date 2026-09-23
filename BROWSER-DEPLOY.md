@@ -78,7 +78,7 @@ Deploy directly through the Firebase web interface.
    - Note: Firebase Console doesn't have a direct upload UI, so you'll need to use Firebase CLI or GitHub
 
 6. **Your site is live!**
-   - URL: `https://pdfnova.web.app`
+   - URL: `https://your-project-id.web.app`
 
 **✅ Pros:**
 - Google's infrastructure

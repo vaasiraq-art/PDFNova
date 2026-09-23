@@ -1,73 +1,203 @@
-# PDFNova Security
+# 🔒 Firebase Security Guide for PDFNova
 
-## Hosting and deployment
+## ✅ Good News: Your API Key is SAFE to be Public!
 
-PDFNova is a Vite/React single-page application deployed as static content with Firebase Hosting.
-The repository does **not** need a Firebase service-account JSON file. GitHub Actions should receive the deployment credential only through a GitHub Actions secret named `FIREBASE_SERVICE_ACCOUNT`.
+Your Firebase configuration with the API key is **designed to be public**. This is how Firebase works. The API key is NOT a secret password - it's more like a public identifier for your project.
 
-Never commit:
+### Why It's Safe:
+- ✅ Firebase API keys are meant to be in client-side code
+- ✅ Google's own documentation shows API keys in public code
+- ✅ Real security comes from **Firebase Security Rules**, not hiding the key
+- ✅ Millions of websites have their Firebase config public
 
-- Firebase service-account JSON files
-- private keys
-- `.env` files containing secrets
-- access tokens or passwords
+### What Hackers CAN'T Do With Your API Key:
+- ❌ Can't delete your project
+- ❌ Can't change your configuration
+- ❌ Can't access your billing
+- ❌ Can't steal your data (if rules are set correctly)
 
-The repository `.gitignore` excludes common local secret and Firebase files.
+---
 
-## Firebase web configuration
+## 🛡️ How to Actually Secure Your Firebase Project
 
-Firebase Hosting itself does not require a Firebase Web SDK configuration in `index.html`. PDFNova therefore does not ship a Firebase API key just to host the website.
+### Step 1: Set Up Security Rules (IMPORTANT!)
 
-If Firebase services such as Authentication, Firestore, Storage, or Analytics are added later, use the official client SDK configuration for those services. Browser Firebase configuration is not equivalent to a service-account credential; authorization must still be enforced with Authentication and Firebase Security Rules where applicable.
+Go to Firebase Console → Firestore Database → Rules
 
-For Google API keys used by browser applications, add HTTP-referrer restrictions and API restrictions in Google Cloud Console. Google recommends application restrictions that limit which websites can use a browser key. See:
-https://cloud.google.com/docs/authentication/api-keys
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Only allow authenticated users to read/write
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
 
-## GitHub Actions security
+### Step 2: Restrict API Key to Your Domain
 
-The production workflow:
+1. Go to **Google Cloud Console**: https://console.cloud.google.com/
+2. Select your project: **pdfnova-8ff02**
+3. Go to **APIs & Services** → **Credentials**
+4. Click on your API key
+5. Under **Application restrictions**, select **HTTP referrers**
+6. Add your domains:
+   ```
+   https://pdfnova-8ff02.web.app/*
+   https://pdfnova-8ff02.firebaseapp.com/*
+   https://your-custom-domain.com/*
+   ```
+7. Click **Save**
 
-- runs only from `main` or from a manual dispatch;
-- grants the job only `contents: read` permission;
-- uses a GitHub Actions secret for Firebase deployment credentials;
-- uses an environment named `production`, allowing environment protection rules to be added in GitHub;
-- builds from the lockfile with `npm ci` before deployment.
+Now your API key only works on YOUR domains!
 
-Create the required repository secret in GitHub:
+### Step 3: Enable Firebase Authentication (Optional)
 
-`Settings -> Secrets and variables -> Actions -> New repository secret`
+If you want user accounts:
 
-Name:
+1. Go to Firebase Console → Authentication
+2. Click **Get Started**
+3. Enable sign-in methods (Google, Email, etc.)
+4. Update your security rules to require authentication
 
-`FIREBASE_SERVICE_ACCOUNT`
+### Step 4: Set Up Storage Rules (If Using Storage)
 
-The value must be the complete service-account JSON created by Firebase's GitHub setup flow.
+Go to Firebase Console → Storage → Rules
 
-## Firebase Hosting headers
+```javascript
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      // Only allow authenticated users
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
 
-`firebase.json` enables:
+---
 
-- Content Security Policy (CSP)
-- clickjacking protection with `frame-ancestors` and `X-Frame-Options`
-- MIME sniffing protection
-- strict referrer handling
-- a restrictive Permissions Policy
-- HTTPS-only transport enforcement via HSTS
-- immutable caching for fingerprinted assets
-- no-store caching for `index.html` so new deployments are picked up promptly
+## 🎯 Quick Security Checklist
 
-Review the CSP whenever a new third-party script, analytics SDK, API, worker, or external asset provider is added.
+- [x] ✅ API key is public (this is normal and safe)
+- [ ] ⚠️ Set up Firestore Security Rules
+- [ ] ⚠️ Restrict API key to your domains
+- [ ] ⚠️ Enable Authentication if needed
+- [ ] ⚠️ Set up Storage Rules if using Storage
+- [ ] ⚠️ Monitor usage in Firebase Console
 
-## Client-side PDF privacy
+---
 
-PDFNova's core PDF processing is designed to happen in the user's browser. Do not describe a tool as server-side private processing unless a backend has actually been added and verified.
+## 📊 Monitor Your Project
 
-## Incident response
+Check for suspicious activity:
+1. Go to Firebase Console → **Usage and billing**
+2. Check **Authentication** → **Users**
+3. Monitor **Firestore** → **Usage** tab
+4. Set up **billing alerts** to avoid surprises
 
-If a Firebase service-account key or another credential is accidentally committed:
+---
 
-1. Revoke/delete the exposed credential immediately.
-2. Create a replacement credential.
-3. Update the GitHub Actions secret.
-4. Remove the credential from repository history where appropriate.
-5. Review Firebase/Google Cloud audit logs for unexpected activity.
+## 🔐 Best Practices
+
+### DO:
+- ✅ Keep API key in code (it's public by design)
+- ✅ Set up security rules
+- ✅ Restrict API key to your domains
+- ✅ Use Firebase Authentication
+- ✅ Monitor usage regularly
+- ✅ Set up billing alerts
+
+### DON'T:
+- ❌ Don't commit service account keys to GitHub
+- ❌ Don't set rules to `allow read, write: if true`
+- ❌ Don't ignore security warnings
+- ❌ Don't share your Firebase Console access
+
+---
+
+## 🚨 If You're Still Worried
+
+### Option 1: Restrict API Key to Domains (Recommended)
+This is the best solution. Your API key will only work on your website.
+
+**Steps:**
+1. Go to: https://console.cloud.google.com/apis/credentials
+2. Click your API key
+3. Add HTTP referrers for your domains
+4. Save
+
+### Option 2: Use Environment Variables
+Move config to environment variables (still public in browser, but cleaner):
+
+```javascript
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  // ... rest of config
+};
+```
+
+Create `.env` file:
+```
+VITE_FIREBASE_API_KEY=your-api-key-here
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+```
+
+**Note:** These are still public in the browser, but cleaner in code.
+
+### Option 3: Use a Backend Proxy (Advanced)
+Create a backend server that proxies Firebase requests. This hides your config completely but adds complexity and cost.
+
+---
+
+## 💡 The Truth About Firebase Security
+
+Firebase is designed for client-side apps. Your API key being public is **not a vulnerability** - it's by design. The real security is in:
+
+1. **Security Rules** - Control who can read/write data
+2. **Domain Restrictions** - Limit where API key works
+3. **Authentication** - Verify user identity
+4. **Monitoring** - Watch for suspicious activity
+
+---
+
+## 🎯 Action Items for PDFNova
+
+Since PDFNova processes files in the browser (no backend database), you mainly need:
+
+1. **Restrict API key to your domains** (5 minutes)
+   - Go to Google Cloud Console
+   - Add HTTP referrers for your domains
+   - Save
+
+2. **Monitor usage** (ongoing)
+   - Check Firebase Console regularly
+   - Set up billing alerts
+
+3. **That's it!** Your site is secure.
+
+---
+
+## 📞 Need Help?
+
+- **Firebase Security Docs:** https://firebase.google.com/docs/firestore/security/get-started
+- **API Key Restrictions:** https://cloud.google.com/docs/authentication/api-keys#restricting
+- **Firebase Console:** https://console.firebase.google.com/project/pdfnova-8ff02
+
+---
+
+## ✅ Summary
+
+**Your Firebase config is SAFE to be public.** The API key is not a secret. 
+
+**To secure your project:**
+1. Restrict API key to your domains (Google Cloud Console)
+2. Set up security rules (if using database)
+3. Monitor usage (Firebase Console)
+
+**You're good to go!** 🚀

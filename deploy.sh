@@ -38,17 +38,17 @@ echo "✅ Build successful"
 # Deploy
 echo ""
 echo "🚀 Deploying to Firebase..."
-firebase deploy --only hosting:pdfnova
+firebase deploy --only hosting
 
 if [ $? -eq 0 ]; then
     echo ""
     echo "✅ Deployment successful!"
     echo ""
     echo "Your site is live at:"
-    echo "  - https://pdfnova.web.app"
-    echo "  - https://pdfnova.web.app"
+    echo "  - https://your-project-id.web.app"
+    echo "  - https://your-project-id.firebaseapp.com"
     echo ""
-    echo "The Firebase Hosting target is pdfnova"
+    echo "Replace 'your-project-id' with your actual Firebase project ID"
 else
     echo ""
     echo "❌ Deployment failed. Check the error messages above."

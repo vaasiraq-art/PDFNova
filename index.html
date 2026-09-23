@@ -34,12 +34,18 @@
     <script type="module" src="/src/main.tsx"></script>
     
     <!-- Firebase SDK -->
+    <!-- 
+      NOTE: Firebase API keys are SAFE to be public. This is by design.
+      Real security comes from Firebase Security Rules and domain restrictions.
+      See SECURITY.md for more information.
+    -->
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
       
       // Your web app's Firebase configuration
+      // This is SAFE to be public - see SECURITY.md
       const firebaseConfig = {
         apiKey: "AIzaSyD0hJbbA4W1X1A1I93Ck84OkKO9mgbYdAE",
         authDomain: "pdfnova-8ff02.firebaseapp.com",
@@ -57,6 +63,8 @@
       // Make Firebase available globally if needed
       window.firebaseApp = app;
       window.firebaseAnalytics = analytics;
+      
+      console.log('✅ PDFNova Firebase initialized successfully');
     </script>
   </body>
 </html>
